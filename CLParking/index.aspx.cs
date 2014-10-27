@@ -35,6 +35,12 @@ namespace CL_Parking
             }
             else
             {
+                // Clear your spaces.
+                Int32 tempPerson = Convert.ToInt32(Request.QueryString["personID"]);
+                sqlParking.UpdateParameters.Clear();
+                sqlParking.UpdateCommand = ("update CL_Spaces set active=0 where carID in (select carid from cl_Cars where personid=@personID)");
+                sqlParking.UpdateParameters.Add("personID", tempPerson.ToString());
+                sqlParking.Update();
                 lblTitle.Text = "Where did you park your ";
                 ddlCar.Visible = true;
                 colorSpaces();
@@ -66,6 +72,7 @@ namespace CL_Parking
                         {
                             ibTemp.BackColor = System.Drawing.Color.Red;
                             ibTemp.ImageUrl = drSpaces["imageURL"].ToString();
+                            ibTemp.ToolTip = "Person: " + drSpaces["firstName"].ToString() + " " + drSpaces["lastName"].ToString() + "\nLocation: " + drSpaces["location"].ToString() + "\nCar: " + drSpaces["description"].ToString();
                         } else if (ibTemp.BackColor != System.Drawing.Color.Red)
                         {
                             ibTemp.BackColor = System.Drawing.Color.Green;
@@ -77,18 +84,18 @@ namespace CL_Parking
 
         protected void ibSpace_click(object sender, ImageClickEventArgs e)
         {
-            // first, make sure the person isn't parked anywhere else
-            Int32 tempPerson = Convert.ToInt32(Request.QueryString["personID"]);
-            sqlParking.UpdateParameters.Clear();
-            sqlParking.UpdateCommand = ("update CL_Spaces set Active=0 where carID=@carID"); 
-            sqlParking.UpdateParameters.Add("carID", ddlCar.SelectedValue);
-            sqlParking.Update();
+            ImageButton imbTemp = (ImageButton)sender;
 
+            // if image is already there, show details
+            if (imbTemp.ImageUrl.Length != 0)
+            {
+                //imbTemp.ToolTip.
+                
+            }
             sqlParking.InsertParameters.Clear();
             sqlParking.InsertParameters.Add("carID", ddlCar.SelectedValue);
 
             // Set the space number from the button commandArgument
-            ImageButton imbTemp = (ImageButton)sender;
             sqlParking.InsertParameters.Add("spaceNum",imbTemp.CommandArgument);
             sqlParking.Insert();
 
