@@ -4,6 +4,10 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
+    <script>
+        window.open('', '_self', ''); 
+        setTimeout("window.close()", 50000);
+    </script>
     <title></title>
 </head>
 <body>

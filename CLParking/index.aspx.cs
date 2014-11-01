@@ -7,6 +7,7 @@ using System.Web.UI.WebControls;
 using System.Data;
 using System.Data.SqlClient;
 using System.Configuration;
+using System.Windows;
 
 namespace CL_Parking
 {
@@ -99,7 +100,12 @@ namespace CL_Parking
             sqlParking.InsertParameters.Add("spaceNum",imbTemp.CommandArgument);
             sqlParking.Insert();
 
-            Response.Redirect("./index.aspx");
+            string close = @"<script type='text/javascript'>
+                                window.returnValue = true;
+                                window.close();
+                                </script>";
+            Response.Write(close);
+            //Response.Redirect("./index.aspx");
         }
     }
 }
